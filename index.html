@@ -148,77 +148,126 @@
                 title: "ASL RECOGNITION",
                 role: "ML - NOV 2025",
                 desc: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
-                link: "project.html"
+                link: "project_ASL.html"
             },
             {
                 title: "AI CHATBOT",
                 role: "MUIKA - NOV 2025",
                 desc: "Tempus leo eu aenean sed diam urna tempor.",
-                link: "project.html"
+                link: "project_Muika.html"
             },
             {
                 title: "WEB SCRAPER",
                 role: "PYTHON - DEC 2025",
                 desc: "Iaculis massa nisl malesuada lacinia integer nunc posuere.",
-                link: "project.html"
+                link: "project_web_scrape.html"
             },
-                {
+            {
                 title: "GAME ENGINE",
                 role: "C++ - JAN 2026",
                 desc: "Ad litora torquent per conubia nostra inceptos himenaeos.",
-                link: "project.html"
+                link: "project_Unity.html"
             }
         ];
-    
+
         let currentIndex = 1;
         const container = document.getElementById('slider-container');
-    
-        function renderSlider() {
+        let cards = [];
+
+        // 1. Create DOM Elements ONCE
+        function initSlider() {
             container.innerHTML = '';
+            cards = [];
             
             projectData.forEach((project, index) => {
                 const el = document.createElement('div');
                 el.className = 'project-card';
-                
-                // Logic to determine the position class
-                let position = 'hidden';
-                const total = projectData.length;
-                let relativePos = (index - currentIndex) % total;
-                if (relativePos < 0) relativePos += total;
-    
-                if (relativePos === 0) {
-                    position = 'active';
-                } else if (relativePos === 1 || relativePos === -(total-1)) {
-                    position = 'next';
-                } else if (relativePos === total-1 || relativePos === -1) {
-                    position = 'prev';
-                }
-    
-                // Add the class so CSS can handle the look
-                el.classList.add(position);
-    
                 el.innerHTML = `
                     <h3>${project.title}</h3>
                     <div style="font-size:0.8rem;font-weight:bold;margin-bottom:5px;">${project.role}</div>
                     <div style="font-size:0.7rem;">${project.desc}</div>
                 `;
-    
-                if (position === 'active') {
-                    el.onclick = () => window.location.href = project.link;
-                }
+                
+                // --- UPDATED CLICK LOGIC ---
+                // Previously, we checked if (el.classList.contains('active')).
+                // Now, we simply allow the click for ALL cards.
+                el.onclick = () => {
+                    window.location.href = project.link;
+                };
+
                 container.appendChild(el);
+                cards.push(el);
+            });
+            
+            // Initial setup
+            updateClasses('initial');
+        }
+
+        // 2. Update Classes based on current index and direction
+        function updateClasses(directionIntent) {
+            const total = projectData.length;
+
+            cards.forEach((el, index) => {
+                el.classList.remove('active', 'prev', 'next', 'off-left', 'off-right', 'hidden');
+
+                let diff = (index - currentIndex + total) % total;
+
+                if (diff === 0) {
+                    el.classList.add('active');
+                } else if (diff === 1) {
+                    el.classList.add('next');
+                } else if (diff === total - 1) {
+                    el.classList.add('prev');
+                } else {
+                    // Logic for the hidden ball to exit/enter correctly
+                    if (directionIntent === 'right-click') {
+                        el.classList.add('off-right');
+                    } else if (directionIntent === 'left-click') {
+                        el.classList.add('off-left');
+                    } else {
+                        el.classList.add('off-right'); 
+                    }
+                }
             });
         }
-    
-        function moveSlide(direction) {
+
+        function moveSlide(buttonDir) {
             const total = projectData.length;
-            currentIndex = (currentIndex + direction + total) % total;
-            renderSlider();
+            let directionIntent = (buttonDir === 1) ? 'right-click' : 'left-click';
+            
+            if (buttonDir === 1) {
+                currentIndex = (currentIndex - 1 + total) % total;
+            } else {
+                currentIndex = (currentIndex + 1) % total;
+            }
+
+            // TELEPORT STRATEGY (Same as before)
+            let incomingIndex; 
+            let snapClass;
+
+            if (directionIntent === 'right-click') {
+                incomingIndex = (currentIndex - 1 + total) % total;
+                snapClass = 'off-left'; 
+            } else {
+                incomingIndex = (currentIndex + 1) % total;
+                snapClass = 'off-right'; 
+            }
+
+            const incomingCard = cards[incomingIndex];
+            incomingCard.classList.add('no-transition');
+            incomingCard.classList.remove('active', 'prev', 'next', 'off-left', 'off-right');
+            incomingCard.classList.add(snapClass);
+            void incomingCard.offsetWidth; // Force Reflow
+            incomingCard.classList.remove('no-transition');
+
+            updateClasses(directionIntent);
         }
         
-        // Initial Render
-        renderSlider();
+        // Initialize
+        initSlider();
     </script>
+
+
 
 </body>
 </html>

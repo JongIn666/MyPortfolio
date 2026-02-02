@@ -1,3 +1,8 @@
+/* Utility to instantly snap elements without animation */
+.no-transition {
+  transition: none !important;
+}
+
 :root {
   --bg-cream: #FAF8F1;
   --text-black: #1a1a1a;
@@ -181,10 +186,13 @@ p { line-height: 1.4; font-size: 0.95rem; }
 .projects-container {
   display: flex;
   justify-content: center;
-  align-items: center; /* Vertically centers content */
+  align-items: center; 
   position: relative;
   height: 400px; 
   perspective: 1000px;
+  
+
+  z-index: 10; 
 }
 
 /* Base Card Style (Replaces the inline JS) */
@@ -260,70 +268,116 @@ p { line-height: 1.4; font-size: 0.95rem; }
   cursor: pointer;
 }
 
-/* --- DESKTOP LAYOUT (>600px) --- */
-/* This applies the "Staggered/Artistic" look from your uploaded image */
+.project-card.active:hover {
+  transform: translate(-50%, -50%) scale(1.25);
+}
 
+
+/* --- DESKTOP LAYOUT (>900px) --- */
 @media (min-width: 900px) {
   
   .projects-section {
-      min-height: 700px; /* Taller area for the staggered layout */
+      min-height: 700px;
   }
 
   /* 1. Make Title Huge and Blue */
   .projects-title-left {
-      font-size: 17vw; /* Very large text */
-      color: var(--accent-blue); /* Light blue */
-      /* margin-left: -50px; */
-      /* padding-left: 0; */
+      font-size: 17vw;
+      color: var(--accent-blue);
       margin-bottom: 0;
-      /* position: absolute; */
       top: 0;
-      /* left: 5%; */
-
       text-align: left;
       padding-left: 0;
-      /* margin-bottom: 20px; */
-
   }
 
   /* 2. Reposition the Cards (Staggered) */
+  /* We use transition to animate between these states */
   
-  /* Center Card */
+  /* Center Card (Active) */
   .project-card.active {
       transform: translate(-50%, -50%) scale(1.7);
-      z-index: 2;
+      z-index: 10;
       opacity: 1;
-      scale: 1vw;
+      pointer-events: auto; /* ENABLE CLICK */
+      cursor: pointer;
   }
 
-  /* Previous Card (Bottom Left) */
+
+
+  /* Bottom Left Card (Prev) */
   .project-card.prev {
       opacity: 1;
-      z-index: 1;
-      /* Move Left and Down */
+      z-index: 5;
       transform: translate(-260%, -20%) scale(1.7); 
+      pointer-events: auto; /* ENABLE CLICK */
+      cursor: pointer;
   }
 
-  /* Next Card (Top Right) */
+  /* Top Right Card (Next) */
   .project-card.next {
       opacity: 1;
-      z-index: 3;
-      /* Move Right and Up */
+      z-index: 5;
       transform: translate(150%, -150%) scale(1.7); 
+      pointer-events: auto; /* ENABLE CLICK */
+      cursor: pointer;
+  }
+
+
+  /* --- HIDDEN STATES FOR ANIMATION --- */
+  
+  /* Off-screen Bottom Left (Entry point for Prev) */
+  .project-card.off-left {
+      opacity: 0;
+      z-index: 1;
+      transform: translate(-400%, 50%) scale(1.0); /* Further down-left */
+      pointer-events: none;
+      
+  }
+
+  /* Off-screen Top Right (Exit point for Next) */
+  .project-card.off-right {
+      opacity: 0;
+      z-index: 1;
+      transform: translate(300%, -250%) scale(1.0); /* Further up-right */
+      pointer-events: none;
   }
 
   /* 3. Move Arrows to the Right */
   .slider-controls {
-      width: 160px; /* Bring buttons closer together */
-      left: auto;   /* Remove center alignment */
-      right: 10%;   /* Stick to right side */
-      bottom: 100px; /* Move up slightly */
+      width: 160px;
+      left: auto;
+      right: 10%;
+      bottom: 100px;
       transform: translate(0%, 100%) scale(1.6);
   }
 
   .summary-section-wrapper { 
     padding-left: 0vw; 
   }
+
+
+/* Active (Center) Hover */
+.project-card.active:hover {
+  /* Keep center position, scale up */
+  transform: translate(-50%, -50%) scale(1.85); 
+  z-index: 25; /* Ensure it floats above everything */
+}
+
+/* Prev (Bottom Left) Hover */
+.project-card.prev:hover {
+  /* Keep bottom-left position, scale up */
+  transform: translate(-260%, -20%) scale(1.85); 
+  z-index: 15;
+}
+
+/* Next (Top Right) Hover */
+.project-card.next:hover {
+  /* Keep top-right position, scale up */
+  transform: translate(150%, -150%) scale(1.85); 
+  z-index: 15;
+}
+
+
 }
 
 
