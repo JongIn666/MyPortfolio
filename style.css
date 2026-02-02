@@ -32,6 +32,10 @@ body {
   font-family: var(--font-body);
   overflow-x: hidden;
 }
+html {
+  overscroll-behavior-y:none;
+}
+
 
 h1, h2, h3, h4, a { font-family: var(--font-heading); text-transform: uppercase; }
 a { text-decoration: none; color: inherit; }
@@ -130,26 +134,26 @@ header {
   border-top: 5px solid black;
   padding-top: 15px;
   width: 90%;
-
 }
 
 
 
 /* Keeping your existing styles for the rest of the page */
 .summary-section-wrapper { 
-  padding-right: 20vw; 
+  padding-right: 5vw;
+  padding-left: 5vw; 
   margin-top: 40px;
-
-
 }
 
-.summary-container { margin: 0 auto; }
+.summary-container { 
+  margin: 0 auto; 
+}
 
-.summary-box { background-color: var(--accent-blue); padding: 40px 30px; width: 100%; }
+.summary-box { background-color: var(--accent-blue); 
+  padding: 40px 30px 70px 30px; 
+  width: 100%; }
 .section-title { font-size: 3rem; margin-bottom: 10px; }
 p { line-height: 1.4; font-size: 0.95rem; }
-
-
 
 
 /* Slider & Footer (Simplified for brevity, ensure you keep your slider JS/CSS) */
@@ -316,6 +320,10 @@ p { line-height: 1.4; font-size: 0.95rem; }
       bottom: 100px; /* Move up slightly */
       transform: translate(0%, 100%) scale(1.6);
   }
+
+  .summary-section-wrapper { 
+    padding-left: 0vw; 
+  }
 }
 
 
@@ -424,6 +432,31 @@ p { line-height: 1.4; font-size: 0.95rem; }
   padding: 0 20px; /* Mobile padding */
 }
 
+
+/* --- FOOTER STYLES --- */
+footer { 
+  background-color: var(--accent-red); 
+  padding: 20px; 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; /* Aligns text vertically */
+  
+  /* CHANGED FONT: Uses Lato (Body) instead of Norwester so it supports Lowercase */
+  font-family: var(--font-heading); 
+  font-size: 1.1rem;
+}
+
+/* Container for Phone & Email */
+.contact_info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: var(--font-body); 
+
+}
+
+
+
 /* --- DESKTOP LAYOUT (> 900px) --- */
 /* This creates the staggered, edge-touching layout */
 @media (min-width: 1110px) {
@@ -456,7 +489,14 @@ p { line-height: 1.4; font-size: 0.95rem; }
     /* object-fit: contain;  */
   }
 
+  .contact_info{
+    display: flex; 
+  }
+
+  .contact_info {
+    display: flex;
+    flex-direction:row;
+    gap: 50px; /* ADDS THE SPACE between Phone and Email */
+  }
 
 }
-
-footer { background-color: var(--accent-red); padding: 20px; display: flex; justify-content: space-between; font-family: var(--font-heading); }
