@@ -1,19 +1,217 @@
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en">
 <head>
-    <title>Portfolio</title>
-    <link rel='stylesheet' href='css/style.css'>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jong In Lee - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <header>
-        <h1>My Portfolio</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="projects.html">Projects</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
+        <div class="top-bar">
+            <div class="hamburger">☰</div>
+        </div>
+
+        <div class="poster-title-container">
+            
+            <div class="curve-wrapper">
+                <svg viewBox="0 0 300 120" class="curve-svg">
+                    <path id="curvePath" d="M 10,100 Q 150,0 290,100" fill="transparent" />
+                    <text width="300">
+                        <textPath href="#curvePath" startOffset="50%" text-anchor="middle" class="curve-text">
+                            WELCOME TO
+                        </textPath>
+                    </text>
+                </svg>
+            </div>
+
+            <div class="text-stack">
+                <span class="name-top">JONG IN LEE’S</span>
+                <span class="name-bottom">PROFILE</span>
+            </div>
+            
+        </div>
+        
+        <nav class="social-links">
+            <a href="https://github.com/JongIn666" target="_blank" class="nav-link">GITHUB</a>
+            <a href="#" class="nav-link">LINKEDIN</a>
         </nav>
     </header>
+
+    <div class="summary-section-wrapper">
+        <section class="summary-container">
+            <div class="summary-box">
+                <h2 class="section-title">Summary</h2>
+                <p>I’m JongIn Lee, a Computer Science student at Purdue University (Software Engineering & Machine Learning track) 
+                    with minors in Accounting and Mathematics. I’m South Korean, born and raised in Japan, and I love building 
+                    products that sit at the intersection of real-world usefulness and solid engineering—from ML-powered 
+                    applications to systems that can actually be deployed and maintained.
+                    </br></br>
+                    I started building projects because I wanted technology to feel more accessible and more helpful to people 
+                    around me. That’s why I’m working on Muika, an offline AI chatbot focused on privacy and responsiveness, and 
+                    an ASL practice web app designed to support learners with real-time feedback. Along the way, I’ve also 
+                    explored creative engineering through a Unity gravity-based puzzle simulation and learned how tools really 
+                    work by implementing a mini compiler from scratch.
+                    </br></br>
+                    Academically, I’m motivated by courses that challenge how I think: CS 381 (Introduction to Algorithms) 
+                    pushed me hard, but it also fueled my curiosity to understand why solutions work; CS 473 (Web Information 
+                    Search & Management) showed me how ML ideas translate into systems people actually use; and CS 352 (Compilers) 
+                    surprised me—I didn’t expect to enjoy it, but I became genuinely interested in parsing, optimization, and how 
+                    languages become executable programs. I’m currently taking Software Testing and Software Engineering I, and 
+                    I’m also learning through Coursera in areas like AWS, SQL, and cloud computing to strengthen my ability to ship 
+                    production-ready software and earn AWS Certified Cloud Practitioner certification.
+                    </br></br>
+                    My core strengths are building end-to-end: Python + TypeScript, Next.js/React, TensorFlow, and AWS (Cognito, 
+                    Lambda, API Gateway, DynamoDB, S3), with experience in Docker and CI/CD. I’m especially interested in ML 
+                    applications, scalable systems, and product development that can make a positive impact on communities.
+                    
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <section class="projects-section">
+        <div class="projects-title-left">PROJECTS</div>
+        
+        <div class="projects-container" id="slider-container"></div>
+
+        <div class="slider-controls">
+            <button class="arrow-btn" onclick="moveSlide(-1)">◀</button>
+            <button class="arrow-btn" onclick="moveSlide(1)">▶</button>
+        </div>
+    </section>
+
+    <div class="bottom-info-grid">
+        
+        <div class="resume-wrapper">
+            <div class="resume-box">
+                
+                <div class="resume-text-group">
+                    <h2 class="section-title" style="font-size: 4rem; line-height: 0.8;">RESUME</h2>
+                    
+                    <div class="resume-date">
+                        Click to view<br>
+                        LAST UPDATED:<br>JAN 31
+                    </div>
+                </div>
+                <a href="assets/Resume.pdf" target="_blank">
+                    <img src="assets/resume-preview.jpg" class="resume-preview-img" alt="Resume Preview">
+                </a>
+                
+            </div>
+        </div>
+
+        <div class="education-wrapper">
+            <div class="education-box">
+                <h2 class="section-title">WHO I AM - more as a person</h2>
+                <p>I don’t really have “one hobby.” My interests changes time to time—when something catches my attention, 
+                    I might dive in, I might not, and then follow the next curiosity. Recently I started learning piano on an 
+                    electronic keyboard I got from a friend. Last year I was fully obsessed with Sudoku. In high school, I played 
+                    trumpet in jazz band, and before that I played flute because my older brother did.
+                </br></br>
+                    I think athletics shaped who I am a lot. I spent four years in cross country, wrestling, and track. Running 
+                    felt natural—maybe because I was on the light side. Wrestling was different. I started freshman year under 
+                    100 pounds, and it was easily the hardest thing I chose to do. I wasn’t good at first, but I stayed because 
+                    it built discipline and put me around people I never would have met otherwise. By senior year I could win most 
+                    matches, but I also learned something important: losing feels terrible to me—and that’s exactly what drives me. 
+                    It pushes me to improve, refine, and come back stronger.
+                </br></br>
+                    In college I picked up judo, and right now I’m training for a full marathon. I’m want to stay active and 
+                    healthy, but I try to do it sustainably: strong enough to keep going, but not so intense that I break my body.
+                </br></br>
+                    If there’s one interest that’s been consistent throughout my life, it’s art. If I hadn’t chosen computer 
+                    science, I might have pursued art. I grew up drawing, took IB Art HL in high school, and 
+                    rediscovered that side of myself while designing instragram post for Purdue’s Japanese Student Association. 
+                    I love the process of turning ideas into visuals.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <span>CONTACT:</span>
+        <span>LAST UPDATED: Jan 31</span>
+    </footer>
+
+    <script>
+        const projectData = [
+            {
+                title: "ASL RECOGNITION",
+                role: "ML - NOV 2025",
+                desc: "Lorem ipsum dolor sit amet consectetur adipiscing elit.",
+                link: "project.html"
+            },
+            {
+                title: "AI CHATBOT",
+                role: "MUIKA - NOV 2025",
+                desc: "Tempus leo eu aenean sed diam urna tempor.",
+                link: "project.html"
+            },
+            {
+                title: "WEB SCRAPER",
+                role: "PYTHON - DEC 2025",
+                desc: "Iaculis massa nisl malesuada lacinia integer nunc posuere.",
+                link: "project.html"
+            },
+                {
+                title: "GAME ENGINE",
+                role: "C++ - JAN 2026",
+                desc: "Ad litora torquent per conubia nostra inceptos himenaeos.",
+                link: "project.html"
+            }
+        ];
+    
+        let currentIndex = 1;
+        const container = document.getElementById('slider-container');
+    
+        function renderSlider() {
+            container.innerHTML = '';
+            
+            projectData.forEach((project, index) => {
+                const el = document.createElement('div');
+                el.className = 'project-card';
+                
+                // Logic to determine the position class
+                let position = 'hidden';
+                const total = projectData.length;
+                let relativePos = (index - currentIndex) % total;
+                if (relativePos < 0) relativePos += total;
+    
+                if (relativePos === 0) {
+                    position = 'active';
+                } else if (relativePos === 1 || relativePos === -(total-1)) {
+                    position = 'next';
+                } else if (relativePos === total-1 || relativePos === -1) {
+                    position = 'prev';
+                }
+    
+                // Add the class so CSS can handle the look
+                el.classList.add(position);
+    
+                el.innerHTML = `
+                    <h3>${project.title}</h3>
+                    <div style="font-size:0.8rem;font-weight:bold;margin-bottom:5px;">${project.role}</div>
+                    <div style="font-size:0.7rem;">${project.desc}</div>
+                `;
+    
+                if (position === 'active') {
+                    el.onclick = () => window.location.href = project.link;
+                }
+                container.appendChild(el);
+            });
+        }
+    
+        function moveSlide(direction) {
+            const total = projectData.length;
+            currentIndex = (currentIndex + direction + total) % total;
+            renderSlider();
+        }
+        
+        // Initial Render
+        renderSlider();
+    </script>
+
 </body>
 </html>
