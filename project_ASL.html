@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Details</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Muika - Project Details</title>
+    <link rel="stylesheet" href="project_style.css">
 </head>
 <body>
 
@@ -13,28 +13,67 @@
     <div class="project-layout">
         
         <div class="col left-panel">
-            <h1 style="font-size: 3rem; margin-bottom: 20px;">ASL RECOGNITION</h1>
+            <h1 class="project-title">American Sign Language (ASL) Practice Website </h1>
             
-            <h3>DESCRIPTION</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.</p>
-            <br>
-            <h3>FEATURES</h3>
-            <p>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere.</p>
+            <h3 class="section-label">Overview</h3>
+            <p> 
+                A web-based ASL alphabet practice site that uses your laptop camera to:
+                <br> • show the user’s hand on-screen,
+                
+                <br> • detect the hand and extract 21 landmark points in real time,
+                
+                <br> • run a lightweight A–Z classifier in the browser, and
+                
+                <br> • stack recognized letters into a string so users can practice spelling.
+                
+
+                </p>            
+            <h3 class="section-label">Who it will help</h3>
+            <p>
+                <br> • ASL learners practicing finger spelling (A–Z) with instant feedback
+                <br> • Teachers/tutors who want a simple practice tool for students
+                <br> • Self-learners who want repetition + measurable progress without installing anything
+            </p>
             
-            <h3>DEMO</h3>
-            <div class="video-placeholder">VIDEO</div>
+
+                <!-- <h3 class="section-label">DEMO</h3>
+                <div class="video-placeholder">VIDEO</div> -->
+
+                <h3 class="section-label">how I improved the chatbot experience—quality, responsiveness, and personality
+                </h3>
+                <h4>From Ollama to embedded inference (better onboarding + control)
+                </h4>
+
+                <p>
+                    My first prototype ran Llama 2 through Ollama, which let me iterate quickly. The downside was product-level friction: users had to install Ollama separately and manage a model runtime outside the app. That requirement broke the “download and start” experience, so I moved to llama-cpp-python to run the model directly inside Muika.
+Improved: <br>
+• Onboarding: fewer external dependencies, easier setup<br>
+• Reliability: consistent runtime behavior across machines<br>
+• Performance tuning: direct control over inference parameters (context, threading, GPU offload)<br>
+                    </p>
+                    <a href="https://asl-practice-lab.vercel.app/" target="_blank" class="nav-link"><h4 class="section-label">Website</h4> </a>
+                    <br>
+                    <a href="https://github.com/JongIn666/ASL-Practice-Lab" target="_blank" class="nav-link"><h4 class="section-label">Github</h4> </a>
+   
         </div>
 
-        <div class="col right-panel">
-            <h3>FEATURES</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.</p>
-            
-            <h3>DEMO</h3>
+        <!-- <div class="col right-panel">
+            <h3 class="section-label">DEMO</h3>
             <div class="video-placeholder">VIDEO</div>
             <div class="video-placeholder">VIDEO</div>
-        </div>
+        </div> -->
 
     </div>
+
+    <footer>
+        <!-- <span>CONTACT INFO</span> -->
+        <!-- <div class="contact_info">
+            <p class=".contact_word">Phone: +1 908 549 2254 </p>
+            <p>Email: jongin9323@gmail.com</p> 
+        </div> -->
+        <!-- <span>LAST UPDATED: Jan 31</span> -->
+        
+    </footer>
 
 </body>
 </html>

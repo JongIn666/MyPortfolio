@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Details</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Muika - Project Details</title>
+    <link rel="stylesheet" href="project_style.css">
 </head>
 <body>
 
@@ -13,28 +13,203 @@
     <div class="project-layout">
         
         <div class="col left-panel">
-            <h1 style="font-size: 3rem; margin-bottom: 20px;">Muika - offline chatbot</h1>
+            <h1 class="project-title">MUIKA</h1>
             
-            <h3>DESCRIPTION</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.</p>
-            <br>
-            <h3>FEATURES</h3>
-            <p>Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas. Iaculis massa nisl malesuada lacinia integer nunc posuere.</p>
+            <h3 class="section-label">Motive</h3>
+            <p>Muika was never supposed to be serious.
+                I started with a simple goal: make a small project in six days—Muika (六日)—just to prove to myself I could build something complete, end-to-end, without overthinking it. The original inspiration was Desktop Goose, that mischievous virtual pet that drags memes across your screen and annoys you in a way that somehow becomes endearing. I wanted to build that same kind of presence—a desktop character that moves, dances, and makes your computer feel less like a tool and more like a space.
+                I was almost done when I had one thought that I couldn’t shake: what if the character could talk back?
+                Not in a scripted way, but in a way that felt alive.
+                That single thought changed the entire direction of the project. I began exploring how to embed a conversational layer into the desktop experience, and after experimenting and iterating, I integrated a local language model (Llama 2 through Ollama) so the character could respond in real time—without relying on the cloud.
+                That’s when I realized the opportunity: character-based AI is growing, but the market still feels wide open—especially for products that prioritize privacy, offline reliability, and a character with a real sense of presence. Muika is my attempt to build that experience: an offline-first desktop companion that’s playful, personal, and built with the ambition to become a real product—not just a demo.
+                </p>            
+            <h3 class="section-label">Overview</h3>
+            <p>Muika is a cross-platform, desktop-native character companion—a small animated character that lives on your screen and you can talk to through speech recognition and a local LLM runtime using llama-cpp-python. The app is designed to feel lightweight and immediate: you can start/stop the character, review previous conversations, switch between characters, and customize the character’s appearance directly from the main window.
+                Under the hood, Muika is built primarily in Python for fast iteration and a pragmatic balance of performance and development speed. I chose Python intentionally—once you integrate a local LLM, application size becomes a real constraint, and I wanted to avoid the heavier deployment footprint that a C# stack would introduce. For packaging and distribution, I deploy with PyInstaller.
+                Muika also supports optional online features powered by AWS (Cognito, S3, DynamoDB, API Gateway, and Lambda). The app is playable without an account, but logging in unlocks progression features like coins, cosmetic purchases, and gacha-style mechanics. Payments are handled through Stripe, with the goal of keeping the core experience accessible while enabling a sustainable product model.
+                This write-up focuses on two areas: (1) how I improved the chatbot experience—quality, responsiveness, and personality—and (2) the software engineering behind shipping a reliable desktop product, from architecture to deployment.
+                </p>
             
-            <h3>DEMO</h3>
-            <div class="video-placeholder">VIDEO</div>
+
+                <!-- <h3 class="section-label">DEMO</h3>
+                <div class="video-placeholder">VIDEO</div> -->
+
+                <h3 class="section-label">how I improved the chatbot experience—quality, responsiveness, and personality
+                </h3>
+                <h4>From Ollama to embedded inference (better onboarding + control)
+                </h4>
+
+                <p>
+                    My first prototype ran Llama 2 through Ollama, which let me iterate quickly. The downside was product-level friction: users had to install Ollama separately and manage a model runtime outside the app. That requirement broke the “download and start” experience, so I moved to llama-cpp-python to run the model directly inside Muika.
+Improved: <br>
+• Onboarding: fewer external dependencies, easier setup<br>
+• Reliability: consistent runtime behavior across machines<br>
+• Performance tuning: direct control over inference parameters (context, threading, GPU offload)<br>
+                    </p>
+
+                    <h4>The core idea: memory that feels real without slowing the model                    </h4>    
+                    <p>
+                        A desktop companion can’t feel alive if it forgets everything. But it also can’t feel responsive if it blindly feeds the entire chat history into the model. Muika’s chatbot experience is built around contextual memory management—a layered approach that maintains continuity across sessions while keeping inference fast and stable.
+<br>
+                        Muika maintains four kinds of memory:<br>                    
+                        1) Short-term memory (chat_log):
+                        Recent messages are kept “live” so the model can respond naturally in the moment. This is crucial for avoiding repetitive or generic replies—without short-term context, the model tends to re-derive the same answer and the conversation feels scripted.
+                        <br>
+                        2) Long-term memory (rolling summary):
+                        Instead of storing an ever-growing full transcript, Muika periodically generates a summary that compresses key facts and events. This creates a believable sense that the character remembers past conversations—without the latency and token cost of sending full history.
+                        <br>
+                        3) Relationship memory (heart/affection system):
+                        Muika tracks an evolving relationship state (heart level, experience points, streaks). This allows the companion’s tone to change gradually as the user interacts more—making the personality feel earned rather than randomly affectionate.
+                        <br>
+                        4) Persona memory (character definition):
+                        Each character has a stable persona spec: behavioral guidelines, speaking style, and example responses. This acts as the “identity anchor,” ensuring the character stays consistent over time and across sessions.
+                        <br>
+                        The result is a companion that feels continuous and personal—while still responding quickly.
+                        </p>
+
+                        <h4>Summarization without token blowups: context-window budgeting
+                        </h4>
+                        <p>
+                            Local LLMs are limited by a fixed context window, so performance depends heavily on what you choose to include. I manage the total context budget explicitly to keep both personality and speed consistent. Early versions attempted to summarize using the entire history, which could exceed the context limit and slow responses. <br>
+                            The solution was “Intelligent truncation” that prioritizes the latest messages, messages that introduce new facts, and relationship-relevant moments.
+                            </p>
+
+                            <h4>Memory pruning strategy (keeps continuity, avoids repetition)
+                            </h4>
+                            <p>
+                                After summarization, Muika prunes history so the model stays fast and the conversation stays fresh: keep the last ~6 messages active in chat_log, compress older content into the rolling summary, and rewrite the summary as a living document (updated, not appended).
+                                This prevents the model from drowning in old context while preserving the important parts that make the character feel consistent.
+                            </p>
+    
+                            <h4>Relationship integration: tone that changes with you
+                            </h4>
+                            <p>
+                                Relationship memory isn’t just a UI bar—it directly changes the conversation.
+                                <br>
+                                Higher heart level: warmer, more open, more playful responses
+                                <br>
+                                Lower heart level: more reserved, formal, cautious responses
+                                <br>
+                                XP + streaks encourage consistent interaction and make progress feel tangible
+                                <br>
+                                This is one of the biggest factors in making Muika feel like a character, not a generic chatbot.
+                                
+                            </p>
+    
+                            <h4>Responsiveness: speed tuning without making the system laggy
+                            </h4>
+                            <p>
+                                Because Muika runs locally, responsiveness depends on careful resource management. I tuned GPU offloading / threading to reduce latency, but I also imposed limits: if the model takes too much GPU, the rest of the desktop experience becomes sluggish and the companion feels “heavy.”
+
+                                So instead of maximizing raw throughput, I tuned for stable real-world usability: fast enough responses while keeping the user’s computer smooth for everything else they’re doing.
+                                
+                            </p>
+    
+
+                            <h3 class="section-label">the software engineering behind shipping a reliable desktop product, from architecture to deployment
+                            </h3>
+                        <p>Muika started as an offline-first desktop app, and in the early versions I intentionally avoided cloud services. It was cheaper, simpler, and faster to iterate. But once I decided to introduce paid and progression features—coins, cosmetic items, and gacha—the security bar changed immediately. If currency and purchases live entirely on the client, they become easy to manipulate. To keep the core app accessible while making monetization reliable, I moved the progression layer to the cloud and designed the system with stronger trust boundaries.
+                            <br>
+                            I won’t share every architectural detail for security reasons, but I can describe several core decisions I made to improve reliability and protect user data and virtual currency.
+                            </p>
+
+                            <h4>Cloud platform choice: AWS for secure identity + server-authoritative economy
+                            </h4>
+                            <p> 
+                                To support login and protected features, I use AWS as the backend platform: Amazon Cognito (Hosted UI) for authentication and user identity, Amazon DynamoDB for storing coin balances and user inventory, AWS Lambda for server-side business logic (minting/spending coins, purchases, gacha), Amazon S3 for hosting cosmetic asset images and metadata, Amazon API Gateway as the secure front door for the desktop app to call backend APIs
+<br>
+This setup keeps the “economy” server-authoritative: the desktop app can request actions, but the backend is responsible for validating and applying changes.
+
+                            </p>
+
+                            <h4>Why DynamoDB instead of RDS
+                            </h4>
+                            <p> 
+                                I chose DynamoDB over a relational database (RDS) for a few practical reasons: 
+                                <br> • Cost + operational simplicity: RDS introduces always-on infrastructure, scaling decisions, patching, and more overhead. DynamoDB is fully managed and scales automatically, which is ideal for a solo-built product moving quickly. 
+                                <br> • Access pattern fit: Coin balance and inventory are simple key-value / document-style lookups: “get user balance,” “update balance,” “append item to inventory,” “read inventory.” DynamoDB is a natural fit for these predictable access patterns. 
+                                <br> • Atomic updates: For currency, correctness matters. DynamoDB supports conditional writes / atomic counters, which helps prevent issues like double-spending or race conditions during purchases.
+                            </p>
+
+                            <h4>Securing the coin system: server-side control with Lambda
+                            </h4>
+                            <p> 
+                                The most important security upgrade was ensuring coins are not controlled by the client.
+                                <br>    • Coin balance is stored in DynamoDB, not locally.
+                                <br>   • All coin-changing operations (earn, purchase, spend) go through Lambda.
+                                <br>    • The desktop app never “sets” coin values directly—it only requests an action.
+                                <br>    • Lambdas validate requests and apply updates using server-side rules (e.g., sufficient balance, item availability, purchase validation).
+                                <br>    This reduces the risk of users editing local files or memory to grant themselves currency.
+                            </p>
+                            <h4>S3 for cosmetics + controlled content updates
+                            </h4>
+                            <p> 
+                                Cosmetic assets (images/metadata) are stored in S3. This gives a few benefits:
+                                <br>    • assets are served efficiently and can be updated without shipping a new desktop build
+                                <br>    • cosmetics can be versioned and managed like content, not code
+                                <br>    • the desktop app can cache assets locally for speed, while still checking for updates
+                                <br>    A Lambda-based flow supports updating the catalog and syncing the latest item metadata to the app experience without exposing direct write access to S3 from the client.
+                            </p>
+
+                            <h4>API Gateway: a clean, secure interface between app and backend
+                            </h4>
+                            <p> 
+                                Muika uses API Gateway to expose backend endpoints in a controlled way, such as:
+                                <br>    •    authentication-aware requests (only logged-in users can access coin/inventory endpoints)
+                                <br>    •    purchase and gacha actions routed to Lambda
+                                <br>    •    catalog queries for cosmetic items
+                                <br>    
+                                API Gateway also makes it easier to apply production-grade protections like:
+                                <br>    •    rate limiting / throttling to prevent abuse
+                                <br>    •    request validation to reject malformed payloads early
+                                <br>    •    consistent routing and versioned endpoints (e.g., /v1/...)
+                            </p>
+
+                            <h4>Practical security improvements (without exposing sensitive details)
+                            </h4>
+                            <p> 
+                                Beyond moving the economy server-side, I designed the system around several standard security principles:
+
+                                <br>    •    Least-privilege IAM: each Lambda has only the permissions it needs (specific tables/buckets/actions).
+                                <br>    •    No secret keys in the client: the desktop app does not embed credentials that could be extracted.
+                                <br>    •    Server-side validation: purchases and currency updates are validated on the backend, not trusted from the UI.
+                                <br>    •    Defensive handling: timeouts, retries with backoff, and graceful fallbacks so the app remains usable even if the backend is temporarily unavailable.
+                                
+                            </p>
+
+                            <h4>Deployment: Packaging a desktop product with PyInstaller
+                            </h4>
+                            <p> 
+                                Muika is shipped as a desktop-native application packaged using PyInstaller. Since local inference already adds size and complexity, deployment required careful attention to:
+
+                                <br>    •       bundling native dependencies cleanly
+                                <br>    •        keeping runtime configuration stable across machines
+                                <br>    •        handling model/resource paths reliably after packaging
+                                <br>    •        minimizing “it works on my machine” issues through repeatable build steps
+                                
+                                <br>     The goal was not just “it runs,” but “it installs and behaves consistently” across environments.
+                                
+                            </p>
+
         </div>
 
-        <div class="col right-panel">
-            <h3>FEATURES</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.</p>
-            
-            <h3>DEMO</h3>
+        <!-- <div class="col right-panel">
+            <h3 class="section-label">DEMO</h3>
             <div class="video-placeholder">VIDEO</div>
             <div class="video-placeholder">VIDEO</div>
-        </div>
+        </div> -->
 
     </div>
+
+    <footer>
+        <!-- <span>CONTACT INFO</span> -->
+        <!-- <div class="contact_info">
+            <p class=".contact_word">Phone: +1 908 549 2254 </p>
+            <p>Email: jongin9323@gmail.com</p> 
+        </div> -->
+        <!-- <span>LAST UPDATED: Jan 31</span> -->
+        
+    </footer>
 
 </body>
 </html>

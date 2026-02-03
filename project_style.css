@@ -1,0 +1,151 @@
+/* project_style.css */
+
+:root {
+    --bg-cream: #FAF8F1;
+    --text-black: #1a1a1a;
+    --accent-red: #FF3B3B;
+    --accent-blue: #8AC6EA;
+    --accent-yellow: #FFD600;
+    --font-heading: 'Norwester', sans-serif;
+    --font-body: 'Lato', sans-serif;
+}
+html {
+    overscroll-behavior-y:none;
+}
+
+
+/* FONT SETUP */
+@font-face {
+    font-family: 'Norwester';
+    src: url('fonts/norwester.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Lato';
+    src: url('fonts/lato.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-cream);
+    color: var(--text-black);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    padding: 20px;
+}
+
+h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+p {
+    font-family: var(--font-body);
+    line-height: 1.5;
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+/* --- BACK LINK --- */
+.back-link {
+    display: inline-block;
+    color: var(--accent-red);
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    text-decoration: none;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+/* --- LAYOUT CONTAINER --- */
+.project-layout {
+    display: flex;
+    /* CHANGED: column puts the Left Panel (Title) First, Right Panel Second */
+    flex-direction: column; 
+    /* CHANGED: 0 gap for mobile so the blue boxes touch */
+    gap: 0; 
+    width: 100%;
+}
+
+/* --- COLUMNS (The Blue Boxes) --- */
+.col {
+    background-color: var(--accent-blue);
+    padding: 40px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- TYPOGRAPHY INSIDE COLUMNS --- */
+.project-title {
+    font-size: 3.5rem;
+    margin-bottom: 30px;
+    color: var(--text-black);
+}
+
+.section-label {
+    font-size: 2rem;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: var(--text-black);
+}
+
+/* --- VIDEO PLACEHOLDER (Yellow Box) --- */
+.video-placeholder {
+    background-color: var(--accent-yellow);
+    width: 100%;
+    height: 250px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--text-black);
+    margin-bottom: 20px;
+}
+
+/* --- FOOTER STYLES --- */
+footer { 
+    background-color: var(--accent-red); 
+    padding: 20px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; /* Aligns text vertically */
+    
+    /* CHANGED FONT: Uses Lato (Body) instead of Norwester so it supports Lowercase */
+    font-family: var(--font-heading); 
+    font-size: 1.1rem;
+  }
+
+
+/* --- DESKTOP LAYOUT (> 900px) --- */
+@media (min-width: 900px) {
+    .project-layout {
+        flex-direction: row; /* Desktop: Side by Side */
+        align-items: stretch; 
+        height: auto;
+        min-height: 90vh;
+        gap: 20px; /* Restore gap for desktop look */
+    }
+
+    .col {
+        width: 50%; 
+    }
+
+    .project-title {
+        font-size: 5rem;
+    }
+}
